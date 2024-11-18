@@ -153,7 +153,7 @@ export const getCareerAdviceByCategoryIAT = async (req, res) => {
 
 export const getCareerAdviceByCategory = async (req, res) => {
   try {
-    const { category } = req.body;
+    const category = req.query.category;
 
     const adviceEntries = await CareerAdvice.find({ category }).select(
       "title createdAt authorId"
