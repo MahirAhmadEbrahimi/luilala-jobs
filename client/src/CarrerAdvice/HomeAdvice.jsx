@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 export default function HomeAdvice() {
+  // ....... Title , Image Api Integration START .........
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,7 +30,7 @@ export default function HomeAdvice() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data: {error}</div>;
 
-  // ....... Title , Image and Created At Api Integration END .........
+  // ....... Title , Image Api Integration END .........
   return (
     <>
       <div>
