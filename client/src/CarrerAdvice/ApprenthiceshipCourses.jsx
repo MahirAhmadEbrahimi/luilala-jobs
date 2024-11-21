@@ -3,6 +3,7 @@ import axios from "axios";
 
 export default function ApprenthiceshipCourses() {
   const [data, setData] = useState([]);
+  const [dataa, setDataa] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,35 +25,50 @@ export default function ApprenthiceshipCourses() {
     fetchData();
   }, []);
 
+  // **********************8
+  useEffect(() => {
+    const fetchDataa = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/imageandtitle?category=Apprenticeship"
+        );
+        setDataa(response.data.populatedEntries);
+        console.log(response.data.populatedEntries); // Access populatedEntries
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.response ? err.response.data : err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDataa();
+  }, []);
+  // **********************8
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data: {error}</div>;
 
-  // **********************8
-  // **********************8
-
   return (
     <>
-      <div class="flex md:flex-row flex-col p-8 sm:p-12 container gap-8">
-        {/* <!-- first --> */}
-        <div class="first-adivce-card relative">
-          <img src="https://media.istockphoto.com/id/1214111410/photo/in-technology-research-facility-chief-engineer-stands-in-the-middle-of-the-lab-and-uses.jpg?s=612x612&w=0&k=20&c=pwpzBFjUwWevuKmOfRsqbzbwwOG8eESG7_6I5zCudis=" />
-          <div class="text-white absolute bottom-0 left-0 p-8 bg-[#002244] bg-opacity-70 w-full">
-            <span class="text-md font-medium">By content team</span>
-            <a href="#" class="block text-2xl mt-3 font-bold hover:underline">
-              Your guide to apprenticeships in 2024
-            </a>
+      <div className="flex md:flex-row flex-col p-8 sm:p-12 container gap-8">
+        {dataa.slice(0, 2).map((entry, index) => (
+          <div key={index} className="first-adivce-card relative">
+            <img
+              src={entry.authorId.image} // Use the image from the API
+              alt="Image not found ... "
+            />
+            <div className="text-white absolute bottom-0 left-0 p-8 bg-[#002244] bg-opacity-70 w-full">
+              <span className="text-md font-medium">By content team</span>
+              <a
+                href="#"
+                className="block text-2xl mt-3 font-bold hover:underline"
+              >
+                {entry.title} {/* Use the title from the API */}
+              </a>
+            </div>
           </div>
-        </div>
-        <div class="first-adivce-card relative">
-          <img src="https://media.istockphoto.com/id/532121712/photo/make-sure-your-business-is-portable.jpg?s=612x612&w=0&k=20&c=PdZvhxBh9RO6duIfKpBPR7b8nLNGDydKGtfpsx4asIo=" />
-          <div class="text-white absolute bottom-0 left-0 p-8 bg-[#002244] bg-opacity-70 w-full">
-            <span class="text-md font-medium">By content team</span>
-            <a href="#" class="block text-2xl mt-3 font-bold hover:underline">
-              Your guide to apprenticeships in 2024
-            </a>
-          </div>
-        </div>
-        {/* <!-- second --> */}
+        ))}
       </div>
       <div className="container  flex w-[100vw] flex-col lg:flex-row justify-between  p-16 pr-8">
         <div className="mb-8   flex flex-col gap-20 lg:basis-[69%]">

@@ -4,6 +4,7 @@ import axios from "axios";
 export default function CarrerDevelopmentCourses() {
   //  for image , tilte and created at start ...........
   const [data, setData] = useState([]);
+  const [dataa, setDataa] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -25,6 +26,26 @@ export default function CarrerDevelopmentCourses() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchDataa = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/imageandtitle?category=Graduates"
+        );
+        setDataa(response.data.populatedEntries);
+        console.log(response.data.populatedEntries); // Access populatedEntries
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.response ? err.response.data : err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDataa();
+  }, []);
+  // Get the first entry from the populatedEntries
+  const firstEntry = dataa[0];
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data: {error}</div>;
 
@@ -33,21 +54,24 @@ export default function CarrerDevelopmentCourses() {
     <>
       {/* firt */}
       <div className="p-12">
-        <div className="first-adivce-card relative overflow-hidden rounded-lg shadow-lg">
-          <img
-            className="w-full h-64 object-cover"
-            src="https://media.istockphoto.com/id/532121712/photo/make-sure-your-business-is-portable.jpg?s=612x612&w=0&k=20&c=PdZvhxBh9RO6duIfKpBPR7b8nLNGDydKGtfpsx4asIo="
-          />
-          <div className="text-white absolute bottom-0 left-0 p-8 bg-[#002244] bg-opacity-70 w-full">
-            <span className="text-md font-medium">By content team</span>
-            <a
-              href="#"
-              className="block text-2xl mt-3 font-bold hover:underline"
-            >
-              Your guide to apprenticeships in 2024
-            </a>
+        {firstEntry && (
+          <div className="first-adivce-card relative overflow-hidden rounded-lg shadow-lg">
+            <img
+              className="w-full h-64 object-cover"
+              src={firstEntry.authorId.image}
+              alt="image not found ..."
+            />
+            <div className="text-white absolute bottom-0 left-0 p-8 bg-[#002244] bg-opacity-70 w-full">
+              <span className="text-md font-medium">By Content Team</span>
+              <a
+                href="#"
+                className="block text-2xl mt-3 font-bold hover:underline"
+              >
+                {firstEntry.title}
+              </a>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className="container  flex w-[100vw] flex-col lg:flex-row justify-between  p-16 pr-8">
