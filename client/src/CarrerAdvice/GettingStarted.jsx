@@ -13,7 +13,7 @@ export default function GettingStarted() {
     const fetchContentData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/career/content?category=Cover Letter"
+          "http://localhost:3000/api/v1/career/content?category=Getting Started"
         );
         setContentData(response.data); // Directly set the response data
       } catch (err) {
@@ -36,8 +36,8 @@ export default function GettingStarted() {
   return (
     <div>
       <CareerAdvice
-        title="Getting started"
-        description="Whether you’re considering what to do after college or sixth form, or are set on finding an apprenticeship suited to you, we’re here to help you secure your first step into working life."
+        title={title} // Use dynamic title from API
+        description={contents} // Use dynamic contents from API
       />
       <CarrerDevelopmentCourses />
     </div>

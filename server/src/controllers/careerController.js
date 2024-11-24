@@ -197,11 +197,12 @@ export const addContentObject = async (req, res) => {
       "Career Development",
       "Graduates",
       "Cover Letter",
-      "GettingStarted",
+      "Getting Started",
       "Work Life",
       "CVs",
       "Interviews",
     ];
+
     if (!validCategories.includes(category)) {
       return res.status(400).json({ message: "Invalid category" });
     }
@@ -236,7 +237,6 @@ export const addContentObject = async (req, res) => {
 export const getContentByCategory = async (req, res) => {
   try {
     const category = req.query.category;
-    console.log(category);
 
     const validCategories = [
       "Home",
