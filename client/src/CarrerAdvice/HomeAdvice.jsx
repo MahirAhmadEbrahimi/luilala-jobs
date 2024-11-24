@@ -6,9 +6,11 @@ import React, { useState, useEffect } from "react";
 export default function HomeAdvice() {
   // ....... Title , Image Api Integration START .........
   const [data, setData] = useState([]);
+  const [contentData, setContentData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch title and image API data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,24 +21,43 @@ export default function HomeAdvice() {
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err.response ? err.response.data : err.message);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
+  // Fetch content API data
+  useEffect(() => {
+    const fetchContentData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/content?category=Home"
+        );
+        setContentData(response.data); // Directly set the response data
+      } catch (err) {
+        console.error("Error fetching content data:", err);
+        setError(err.response ? err.response.data : err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContentData();
+  }, []);
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data: {error}</div>;
 
-  // ....... Title , Image Api Integration END .........
+  // Extract title and contents from contentData
+  const { title, contents } = contentData;
+
   return (
     <>
       <div>
         <CareerAdvice
-          title="Career Advice"
-          description="Our advice centre contains articles with helpful tips, how-to guides and CV templates. Written by career experts, were committed to helping your job search and ensuring you get the most from your career."
+          title={title} // Use dynamic title from API
+          description={contents} // Use dynamic contents from API
         />
 
         {/* Second Section */}

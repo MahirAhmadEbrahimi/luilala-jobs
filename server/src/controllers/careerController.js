@@ -197,7 +197,7 @@ export const addContentObject = async (req, res) => {
       "Career Development",
       "Graduates",
       "Cover Letter",
-      "Getting Started",
+      "GettingStarted",
       "Work Life",
       "CVs",
       "Interviews",
@@ -235,7 +235,8 @@ export const addContentObject = async (req, res) => {
 
 export const getContentByCategory = async (req, res) => {
   try {
-    const { category } = req.body;
+    const category = req.query.category;
+    console.log(category);
 
     const validCategories = [
       "Home",
@@ -260,7 +261,7 @@ export const getContentByCategory = async (req, res) => {
         .json({ message: "No content found for this category" });
     }
 
-    res.json({ category: article.category, contents: article.contents });
+    res.json({ title: article.category, contents: article.contents[0].text });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
