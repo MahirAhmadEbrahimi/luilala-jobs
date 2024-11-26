@@ -129,7 +129,7 @@ export const getTopAgencies = async (req, res) => {
         $sort: { jobCount: -1 }, // Sort by job count in descending order
       },
       {
-        $limit: 5, // Limit to the top 5 unique agencies
+        $limit: 15, // Limit to the top 5 unique agencies
       },
     ]);
 
