@@ -75,9 +75,7 @@ export default function ApprenthiceshipCourses() {
           {/* start first grid */}
           <div className="">
             <div className="flex  justify-between items-center mb-4">
-              <h3 className="text-2xl font-semibold">
-                Popular Career Advice ⭐
-              </h3>
+              <h3 className="text-2xl font-semibold">Popular Career Advice</h3>
               <a href="#" className="text-blue-500 hover:underline">
                 All courses
               </a>

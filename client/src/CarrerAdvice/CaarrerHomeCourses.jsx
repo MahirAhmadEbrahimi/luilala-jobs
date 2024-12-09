@@ -90,7 +90,7 @@ export default function CarrerHomeCourses() {
         {/* start first grid */}
         <div className="container mx-auto p-4">
           <div className="flex  justify-between items-center mb-4">
-            <h3 className="text-2xl font-semibold">Popular Career Advice ⭐</h3>
+            <h3 className="text-2xl font-semibold">Popular Career Advice </h3>
             <a href="#" className="text-blue-500 hover:underline">
               All courses
             </a>
@@ -135,9 +135,7 @@ export default function CarrerHomeCourses() {
 
         <div className="">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-semibold">
-              CV Tips and Templatessssssssssssss
-            </h3>
+            <h3 className="text-2xl font-semibold">CV Tips and Templates</h3>
             <a href="#" className="text-blue-500 hover:underline">
               All courses
             </a>
@@ -182,7 +180,7 @@ export default function CarrerHomeCourses() {
 
           {/* start third grid */}
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-semibold">Cover Letter Guides✨✨</h3>
+            <h3 className="text-2xl font-semibold">Cover Letter Guides</h3>
             <a href="#" className="text-blue-500 hover:underline">
               All courses
             </a>
@@ -227,7 +225,7 @@ export default function CarrerHomeCourses() {
         {/* start fifth grid */}
         <div className="">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-semibold">Interview Help ⭐✨</h3>
+            <h3 className="text-2xl font-semibold">Interview Help </h3>
             <a href="#" className="text-blue-500 hover:underline">
               All courses
             </a>
