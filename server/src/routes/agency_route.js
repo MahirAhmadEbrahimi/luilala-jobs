@@ -17,6 +17,8 @@ router.patch("/agencies/:id", agencyController.updateAgency);
 // Delete an agency
 router.delete("/agencies/:id", agencyController.deleteAgency);
 
+// get  all agencies by name
+router.get("/byagencyname", agencyController.byagencyname);
 // get popular agencies
 
 router.get("/popularagencies", agencyController.getTopAgencies);

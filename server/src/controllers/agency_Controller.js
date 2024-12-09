@@ -206,3 +206,49 @@ export const getAgenciesWithIndustry = async (req, res) => {
     });
   }
 };
+
+// Get  agency by name
+
+export const byagencyname = async (req, res) => {
+  const { name } = req.query; // Get the agency name from query parameters
+
+  if (!name) {
+    return res.status(400).json({ message: "Agency name is required" });
+  }
+
+  try {
+    // Case-insensitive search for the agency name
+    const agency = await Agency.findOne({ name: new RegExp(`^${name}$`, "i") });
+
+    if (!agency) {
+      return res.status(404).json({ message: "Agency not found" });
+    }
+
+    // Use lodash to omit the __v and _id fields from the agency result
+    const cleanedAgency = _.omit(agency.toObject(), ["_id", "__v"]);
+
+    // Find jobs associated with the agency's jobId
+    const jobs = await Job.find({ _id: cleanedAgency.jobId });
+
+    // Extract specific job fields
+    const jobDetails = jobs.map((job) => ({
+      title: job.title,
+      city: job.city,
+      country: job.country,
+      minSalary: job.minSalary,
+      maxSalary: job.maxSalary,
+      location: job.location,
+    }));
+
+    // Return agency details and extracted job information
+    return res.status(200).json({
+      agency: cleanedAgency,
+      jobs: jobDetails, // This will return an array of job details
+    });
+  } catch (error) {
+    console.error("Error finding agency:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
+  }
+};
