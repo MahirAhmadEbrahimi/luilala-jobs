@@ -3,6 +3,9 @@ import axios from "axios";
 
 export default function CarrerHomeCourses() {
   const [data, setData] = useState([]);
+  const [datacoverlatter, setDatacoverlatter] = useState([]);
+  const [datainterviews, setDatainterviews] = useState([]);
+  const [datacvs, setDatacvs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -22,6 +25,60 @@ export default function CarrerHomeCourses() {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchDataa = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/category?category=Cover Letter"
+        );
+        setDatacoverlatter(response.data.populatedEntries); // Access populatedEntries
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.response ? err.response.data : err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDataa();
+  }, []);
+
+  useEffect(() => {
+    const fetchDataaa = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/category?category=Interviews"
+        );
+        setDatainterviews(response.data.populatedEntries); // Access populatedEntries
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.response ? err.response.data : err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDataaa();
+  }, []);
+
+  useEffect(() => {
+    const fetchDataaaa = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/career/category?category=CVs"
+        );
+        setDatacvs(response.data.populatedEntries); // Access populatedEntries
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.response ? err.response.data : err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDataaaa();
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -78,376 +135,135 @@ export default function CarrerHomeCourses() {
 
         <div className="">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-semibold">CV Tips and Templates</h3>
+            <h3 className="text-2xl font-semibold">
+              CV Tips and Templatessssssssssssss
+            </h3>
             <a href="#" className="text-blue-500 hover:underline">
               All courses
             </a>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* First Card */}
-
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1332104709/photo/shot-of-a-young-male-engineer-using-his-laptop-in-a-server-room.jpg?s=612x612&w=0&k=20&c=6TEZsUUrJjDPzPzptE2ssy0gcdXhEYu6_zXWygwJkCM="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-xl font-medium pb-8 text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-8">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
+            {datacvs.slice(0, 6).map((article) => (
+              <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={`${article.authorId.image}`} // Adjust the base URL as needed
+                    alt="Imaeg Not Found ..!" // Use the article title for accessibility
+                    className="w-full h-full object-cover clip-path-mypolygon"
+                  />
+                </div>
+                <div className="p-4">
+                  <a
+                    href="#"
+                    className="text-lg font-medium text-gray-800 hover:text-[#002277]"
+                  >
+                    {article.title} {/* Article title */}
+                  </a>
+                  <div className="flex items-center mt-4">
+                    <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
+                      C {/* Placeholder for initials or icon */}
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-gray-600 text-lg">Content team</p>{" "}
+                      <p className="text-gray-500 text-sm">
+                        {new Date(article.createdAt).toLocaleDateString()}{" "}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Second Card */}
-
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1303835913/photo/smiling-african-american-man-in-data-center.jpg?s=612x612&w=0&k=20&c=j7qd5gta6Wzjx6z0YO3rwTEtKGZc9A3Hd3C3e1bKtow="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-lg font-medium text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-4">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Third Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1149529036/photo/overtime-is-something-all-successful-people-must-do.jpg?s=612x612&w=0&k=20&c=d1p5dVwyL0kS58TN_80qBgi0wl-zEpNCOKfODwXVx10="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-lg font-medium text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-4">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
         <div className="">
           {/* finish second grid */}
+
           {/* start third grid */}
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-semibold">Cover Letter Guides</h3>
+            <h3 className="text-2xl font-semibold">Cover Letter Guides✨✨</h3>
             <a href="#" className="text-blue-500 hover:underline">
               All courses
             </a>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* First Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1332104709/photo/shot-of-a-young-male-engineer-using-his-laptop-in-a-server-room.jpg?s=612x612&w=0&k=20&c=6TEZsUUrJjDPzPzptE2ssy0gcdXhEYu6_zXWygwJkCM="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-xl font-medium pb-8 text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-8">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
+
+            {datacoverlatter.slice(0, 6).map((article) => (
+              <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={`${article.authorId.image}`} // Adjust the base URL as needed
+                    alt="Imaeg Not Found ..!" // Use the article title for accessibility
+                    className="w-full h-full object-cover clip-path-mypolygon"
+                  />
+                </div>
+                <div className="p-4">
+                  <a
+                    href="#"
+                    className="text-lg font-medium text-gray-800 hover:text-[#002277]"
+                  >
+                    {article.title} {/* Article title */}
+                  </a>
+                  <div className="flex items-center mt-4">
+                    <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
+                      C {/* Placeholder for initials or icon */}
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-gray-600 text-lg">Content team</p>{" "}
+                      <p className="text-gray-500 text-sm">
+                        {new Date(article.createdAt).toLocaleDateString()}{" "}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            {/* Second Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1303835913/photo/smiling-african-american-man-in-data-center.jpg?s=612x612&w=0&k=20&c=j7qd5gta6Wzjx6z0YO3rwTEtKGZc9A3Hd3C3e1bKtow="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-lg font-medium text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-4">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Third Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1149529036/photo/overtime-is-something-all-successful-people-must-do.jpg?s=612x612&w=0&k=20&c=d1p5dVwyL0kS58TN_80qBgi0wl-zEpNCOKfODwXVx10="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-lg font-medium text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-4">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
         {/* finish second grid */}
-        {/* start fourth grid */}
-        <div className="">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-semibold">CV Tips and Templates</h3>
-            <a href="#" className="text-blue-500 hover:underline">
-              All courses
-            </a>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* First Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1332104709/photo/shot-of-a-young-male-engineer-using-his-laptop-in-a-server-room.jpg?s=612x612&w=0&k=20&c=6TEZsUUrJjDPzPzptE2ssy0gcdXhEYu6_zXWygwJkCM="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-xl font-medium pb-8 text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-8">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Second Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1303835913/photo/smiling-african-american-man-in-data-center.jpg?s=612x612&w=0&k=20&c=j7qd5gta6Wzjx6z0YO3rwTEtKGZc9A3Hd3C3e1bKtow="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-lg font-medium text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-4">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Third Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1149529036/photo/overtime-is-something-all-successful-people-must-do.jpg?s=612x612&w=0&k=20&c=d1p5dVwyL0kS58TN_80qBgi0wl-zEpNCOKfODwXVx10="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-lg font-medium text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-4">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* finish fourth grid */}
+
         {/* start fifth grid */}
         <div className="">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-semibold">Interview Help</h3>
+            <h3 className="text-2xl font-semibold">Interview Help ⭐✨</h3>
             <a href="#" className="text-blue-500 hover:underline">
               All courses
             </a>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* First Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1332104709/photo/shot-of-a-young-male-engineer-using-his-laptop-in-a-server-room.jpg?s=612x612&w=0&k=20&c=6TEZsUUrJjDPzPzptE2ssy0gcdXhEYu6_zXWygwJkCM="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-xl font-medium pb-8 text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-8">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
+            {datainterviews.slice(0, 6).map((article) => (
+              <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={`${article.authorId.image}`} // Adjust the base URL as needed
+                    alt="Imaeg Not Found ..!" // Use the article title for accessibility
+                    className="w-full h-full object-cover clip-path-mypolygon"
+                  />
+                </div>
+                <div className="p-4">
+                  <a
+                    href="#"
+                    className="text-lg font-medium text-gray-800 hover:text-[#002277]"
+                  >
+                    {article.title} {/* Article title */}
+                  </a>
+                  <div className="flex items-center mt-4">
+                    <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
+                      C {/* Placeholder for initials or icon */}
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-gray-600 text-lg">Content team</p>{" "}
+                      <p className="text-gray-500 text-sm">
+                        {new Date(article.createdAt).toLocaleDateString()}{" "}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            {/* Second Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1303835913/photo/smiling-african-american-man-in-data-center.jpg?s=612x612&w=0&k=20&c=j7qd5gta6Wzjx6z0YO3rwTEtKGZc9A3Hd3C3e1bKtow="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-lg font-medium text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-4">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Third Card */}
-            <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="https://media.istockphoto.com/id/1149529036/photo/overtime-is-something-all-successful-people-must-do.jpg?s=612x612&w=0&k=20&c=d1p5dVwyL0kS58TN_80qBgi0wl-zEpNCOKfODwXVx10="
-                  alt="Career Advice"
-                  className="w-full h-full object-cover clip-path-mypolygon"
-                />
-              </div>
-              <div className="p-4">
-                <a
-                  href="#"
-                  className="text-lg font-medium text-gray-800 hover:text-[#002277]"
-                >
-                  7 tips for writing the experience section of your CV
-                </a>
-                <div className="flex items-center mt-4">
-                  <div className="bg-[#002244] text-xl text-white h-12 w-12 rounded-full flex justify-center items-center">
-                    C
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-600 text-lg">Content team</p>
-                    <p className="text-gray-500   text-sm">Feb 23, 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
         {/* finish fifth grid */}

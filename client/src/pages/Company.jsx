@@ -6,6 +6,8 @@ import CompanyCourse from "../components/CompanyCourses";
 import Industries from "../components/Industries";
 
 export default function Company() {
+  // ............. Serching Campany  Start................
+  // ............. Serching Campany  END..................
   const [activeTab, setActiveTab] = useState("employee");
   const [searchQuery, setSearchQuery] = useState("");
   const [liveJobs, setLiveJobs] = useState(0);
