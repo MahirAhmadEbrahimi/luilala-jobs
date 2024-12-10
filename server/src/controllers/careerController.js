@@ -1,7 +1,7 @@
 import { CareerAdvice } from "../models/careerAdvice.js";
-
+import asyncHandler from "../middlewares/asyncHandler.js";
 // Create a new career advice entry
-export const createCareerAdvice = async (req, res) => {
+export const createCareerAdvice = asyncHandler(async (req, res) => {
   try {
     const careerAdvice = new CareerAdvice(req.body);
     await careerAdvice.save();
@@ -12,10 +12,10 @@ export const createCareerAdvice = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-};
+});
 
 // Get all career advice entries
-export const getAllCareerAdvice = async (req, res) => {
+export const getAllCareerAdvice = asyncHandler(async (req, res) => {
   try {
     const careerAdvices = await CareerAdvice.find().populate({
       path: "authorId",
@@ -30,10 +30,10 @@ export const getAllCareerAdvice = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
 // Get a specific career advice entry by title
-export const getCareerAdviceByTitle = async (req, res) => {
+export const getCareerAdviceByTitle = asyncHandler(async (req, res) => {
   try {
     const { title } = req.body; // Get title from the request body
 
@@ -49,9 +49,9 @@ export const getCareerAdviceByTitle = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 // Update a career advice entry
-export const updateCareerAdvice = async (req, res) => {
+export const updateCareerAdvice = asyncHandler(async (req, res) => {
   try {
     const careerAdvice = await CareerAdvice.findByIdAndUpdate(
       req.params.id,
@@ -64,10 +64,10 @@ export const updateCareerAdvice = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-};
+});
 
 // Delete a career advice entry
-export const deleteCareerAdvice = async (req, res) => {
+export const deleteCareerAdvice = asyncHandler(async (req, res) => {
   try {
     const careerAdvice = await CareerAdvice.findByIdAndDelete(req.params.id);
     if (!careerAdvice)
@@ -76,10 +76,10 @@ export const deleteCareerAdvice = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
 // Add a comment to a career advice entry
-export const addComment = async (req, res) => {
+export const addComment = asyncHandler(async (req, res) => {
   try {
     const careerAdvice = await CareerAdvice.findById(req.params.id);
     if (!careerAdvice)
@@ -97,10 +97,10 @@ export const addComment = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-};
+});
 
 // Rate a career advice entry
-export const rateCareerAdvice = async (req, res) => {
+export const rateCareerAdvice = asyncHandler(async (req, res) => {
   try {
     const careerAdvice = await CareerAdvice.findById(req.params.id);
     if (!careerAdvice)
@@ -118,10 +118,10 @@ export const rateCareerAdvice = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-};
+});
 ////////////////// get onyly Image and title  Api for category ................
 
-export const getCareerAdviceByCategoryIAT = async (req, res) => {
+export const getCareerAdviceByCategoryIAT = asyncHandler(async (req, res) => {
   try {
     const category = req.query.category;
 
@@ -147,11 +147,11 @@ export const getCareerAdviceByCategoryIAT = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
 ////////// get Image , Title and created at api ...................
 
-export const getCareerAdviceByCategory = async (req, res) => {
+export const getCareerAdviceByCategory = asyncHandler(async (req, res) => {
   try {
     const category = req.query.category;
 
@@ -177,11 +177,11 @@ export const getCareerAdviceByCategory = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
 ////////////////////
 
-export const addContentObject = async (req, res) => {
+export const addContentObject = asyncHandler(async (req, res) => {
   try {
     const { category, text } = req.body;
 
@@ -232,9 +232,9 @@ export const addContentObject = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
-};
+});
 
-export const getContentByCategory = async (req, res) => {
+export const getContentByCategory = asyncHandler(async (req, res) => {
   try {
     const category = req.query.category;
 
@@ -266,4 +266,4 @@ export const getContentByCategory = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
-};
+});

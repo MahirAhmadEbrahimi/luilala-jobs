@@ -2,8 +2,9 @@ import Agency from "../models/agency_Model.js"; // Ensure correct import syntax
 import _ from "lodash";
 
 import Job from "../models/jobsModel.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 // Create a new agency
-export const createAgency = async (req, res) => {
+export const createAgency = asyncHandler(async (req, res) => {
   const agency = new Agency(req.body);
   try {
     const savedAgencyy = await agency.save();
@@ -12,11 +13,11 @@ export const createAgency = async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
-};
+});
 
 // Get all agencies
 
-export const getAllAgencies = async (req, res) => {
+export const getAllAgencies = asyncHandler(async (req, res) => {
   try {
     const agencies = await Agency.find();
 
@@ -32,11 +33,11 @@ export const getAllAgencies = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+});
 
 // Get an agency by ID
 
-export const getAgencyById = async (req, res) => {
+export const getAgencyById = asyncHandler(async (req, res) => {
   try {
     const agency = await Agency.findById(req.params.id);
 
@@ -55,10 +56,10 @@ export const getAgencyById = async (req, res) => {
       .status(500)
       .json({ message: "An error occurred while retrieving the agency." });
   }
-};
+});
 // Update an agency
 
-export const updateAgency = async (req, res) => {
+export const updateAgency = asyncHandler(async (req, res) => {
   try {
     const updatedAgency = await Agency.findByIdAndUpdate(
       req.params.id,
@@ -81,10 +82,10 @@ export const updateAgency = async (req, res) => {
       .status(400)
       .json({ message: "An error occurred while updating the agency." });
   }
-};
+});
 
 // Delete an agency
-export const deleteAgency = async (req, res) => {
+export const deleteAgency = asyncHandler(async (req, res) => {
   try {
     const deletedAgency = await Agency.findByIdAndDelete(req.params.id);
 
@@ -101,10 +102,10 @@ export const deleteAgency = async (req, res) => {
       .status(500)
       .json({ message: "An error occurred while deleting the agency." });
   }
-};
+});
 // Controller to get top 3 agencies by job countimport _ from 'lodash'; // Make sure to import lodash
 
-export const getTopAgencies = async (req, res) => {
+export const getTopAgencies = asyncHandler(async (req, res) => {
   try {
     const topAgencies = await Agency.aggregate([
       {
@@ -152,11 +153,11 @@ export const getTopAgencies = async (req, res) => {
       message: "Server Error",
     });
   }
-};
+});
 /// git by country all agencies
 
 // Get all unique locations from the agencies
-export const getUniqueLocations = async (req, res) => {
+export const getUniqueLocations = asyncHandler(async (req, res) => {
   try {
     const locations = await Agency.distinct("location"); // Get distinct locations
 
@@ -173,10 +174,10 @@ export const getUniqueLocations = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+});
 
 /////////////////////////// get all agency with there jobs alos
-export const getAgenciesWithIndustry = async (req, res) => {
+export const getAgenciesWithIndustry = asyncHandler(async (req, res) => {
   try {
     const agencies = await Agency.find()
       .populate("indestorytype") // Populate the indestorytype field
@@ -205,11 +206,11 @@ export const getAgenciesWithIndustry = async (req, res) => {
       message: error.message,
     });
   }
-};
+});
 
 // Get  agency by name
 
-export const byagencyname = async (req, res) => {
+export const byagencyname = asyncHandler(async (req, res) => {
   const { name } = req.query; // Get the agency name from query parameters
 
   if (!name) {
@@ -251,4 +252,4 @@ export const byagencyname = async (req, res) => {
       .status(500)
       .json({ message: "Server error", error: error.message });
   }
-};
+});
