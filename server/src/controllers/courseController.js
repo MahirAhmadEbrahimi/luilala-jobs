@@ -1,7 +1,7 @@
-import Course from '../models/courseModel.js';
-import Lesson from '../models/LessonsModule.js';
-import User from '../models/userModel.js';
-import asyncHandler from '../middlewares/asyncHandler.js';
+import Course from "../models/courseModel.js";
+import Lesson from "../models/LessonsModule.js";
+import User from "../models/userModel.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 
 //Search courses
 
@@ -13,19 +13,19 @@ export const searchCourses1 = async (req, res) => {
     // Build query object
     const query = {};
     if (category) query.category = category;
-    if (searchQuery) query.name = { $regex: searchQuery, $options: 'i' }; // Case-insensitive search
+    if (searchQuery) query.name = { $regex: searchQuery, $options: "i" }; // Case-insensitive search
 
     // Sort options
     const sortOptions = {
-      'Price (high to low)': { price: -1 },
-      'Price (low to high)': { price: 1 },
-      'Rating (high to low)': { ratingAverage: -1 },
-      'Rating (low to high)': { ratingAverage: 1 },
-      'Release Date': { createdAt: -1 },
-      'Name A-Z': { name: 1 },
-      'Name Z-A': { name: -1 },
-      'Duration (short to long)': { duration: 1 },
-      'Duration (long to short)': { duration: -1 },
+      "Price (high to low)": { price: -1 },
+      "Price (low to high)": { price: 1 },
+      "Rating (high to low)": { ratingAverage: -1 },
+      "Rating (low to high)": { ratingAverage: 1 },
+      "Release Date": { createdAt: -1 },
+      "Name A-Z": { name: 1 },
+      "Name Z-A": { name: -1 },
+      "Duration (short to long)": { duration: 1 },
+      "Duration (long to short)": { duration: -1 },
     };
 
     const sort = sortOptions[sortBy] || {};
@@ -35,8 +35,8 @@ export const searchCourses1 = async (req, res) => {
 
     res.status(200).json({ courses });
   } catch (error) {
-    console.error('Error fetching courses:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error fetching courses:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -67,7 +67,7 @@ export const getCourseByID = asyncHandler(async (req, res) => {
   const course = await Course.findById(req.params.id);
   if (!course) {
     res.status(404);
-    throw new Error('Course not found');
+    throw new Error("Course not found");
   }
   res.status(200).json(course);
 });
@@ -80,7 +80,7 @@ export const updateCourseByID = asyncHandler(async (req, res) => {
   });
   if (!course) {
     res.status(404);
-    throw new Error('Course not found');
+    throw new Error("Course not found");
   }
   res.status(200).json(course);
 });
@@ -90,24 +90,24 @@ export const deleteCourseByID = asyncHandler(async (req, res) => {
   const course = await Course.findByIdAndDelete(req.params.id);
   if (!course) {
     res.status(404);
-    throw new Error('Course not found');
+    throw new Error("Course not found");
   }
-  res.status(200).json({ message: 'Course deleted' });
+  res.status(200).json({ message: "Course deleted" });
 });
 
 export const courseCategories = asyncHandler(async (req, res) => {
   const result = await Course.aggregate([
     {
       $group: {
-        _id: '$category',
+        _id: "$category",
         count: { $sum: 1 },
-        image: { $first: '$image' },
+        image: { $first: "$image" },
       },
     },
     {
       $project: {
         _id: 0,
-        category: '$_id',
+        category: "$_id",
         count: 1,
         image: 1,
       },
@@ -118,19 +118,19 @@ export const courseCategories = asyncHandler(async (req, res) => {
 });
 
 export const courseCategoriesNames = asyncHandler(async (req, res) => {
-  const result = await Course.distinct('category');
+  const result = await Course.distinct("category");
 
   res.status(200).json(result);
 });
 
 export const coursesTypes = asyncHandler(async (req, res) => {
-  const coursesTypes = await Course.distinct('type');
+  const coursesTypes = await Course.distinct("type");
 
   res.status(200).json(coursesTypes);
 });
 
 export const coursesDurations = asyncHandler(async (req, res) => {
-  const coursesDurations = await Course.distinct('duration');
+  const coursesDurations = await Course.distinct("duration");
 
   res.status(200).json(coursesDurations);
 });
@@ -141,17 +141,17 @@ export const searchCoursByName = async (req, res) => {
     if (!name) {
       return res
         .status(400)
-        .json({ message: 'Course name is required for search' });
+        .json({ message: "Course name is required for search" });
     }
 
     // Use a regular expression to perform a case-insensitive search
     const courses = await Course.find({
-      name: { $regex: name, $options: 'i' },
+      name: { $regex: name, $options: "i" },
     });
 
     res.status(200).json({ count: courses.length, courses });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error });
+    res.status(500).json({ message: "Server Error", error });
   }
 };
 
@@ -167,14 +167,14 @@ export const enrollStudentInCourse = async (req, res) => {
     const course = await Course.findById(courseId);
 
     if (!user || !course) {
-      return res.status(404).json({ message: 'User or Course not found' });
+      return res.status(404).json({ message: "User or Course not found" });
     }
 
     // Check if the user is already enrolled in the course
     if (user.enrolledCourses.includes(courseId)) {
       return res
         .status(400)
-        .json({ message: 'User already enrolled in this course' });
+        .json({ message: "User already enrolled in this course" });
     }
 
     // Add course to user's enrolledCourses
@@ -186,14 +186,14 @@ export const enrollStudentInCourse = async (req, res) => {
     await course.save();
 
     return res.status(200).json({
-      message: 'Student enrolled in course successfully',
+      message: "Student enrolled in course successfully",
       user,
       course,
     });
   } catch (error) {
     return res
       .status(500)
-      .json({ message: 'Error enrolling student in course', error });
+      .json({ message: "Error enrolling student in course", error });
   }
 };
 
@@ -206,7 +206,7 @@ export const addLessonToCourse = async (req, res) => {
     const course = await Course.findById(courseId);
 
     if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({ message: "Course not found" });
     }
 
     // Create a new lesson
@@ -224,14 +224,14 @@ export const addLessonToCourse = async (req, res) => {
     await course.save();
 
     return res.status(200).json({
-      message: 'Lesson added to course successfully',
+      message: "Lesson added to course successfully",
       lesson: newLesson,
       course,
     });
   } catch (error) {
     return res
       .status(500)
-      .json({ message: 'Error adding lesson to course', error });
+      .json({ message: "Error adding lesson to course", error });
   }
 };
 
@@ -241,10 +241,10 @@ export const getCourseStats = async (req, res) => {
 
   try {
     // Find the course by ID
-    const course = await Course.findById(courseId).populate('lessons');
+    const course = await Course.findById(courseId).populate("lessons");
 
     if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({ message: "Course not found" });
     }
 
     // Fetch the number of students enrolled in the specific course
@@ -264,7 +264,7 @@ export const getCourseStats = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: 'Error fetching course stats', error });
+      .json({ message: "Error fetching course stats", error });
   }
 };
 
@@ -279,7 +279,7 @@ export const getAllLessons = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: 'Error fetching general stats', error });
+      .json({ message: "Error fetching general stats", error });
   }
 };
 
@@ -294,6 +294,21 @@ export const getAllStudents = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: 'Error fetching general stats', error });
+      .json({ message: "Error fetching general stats", error });
   }
 };
+
+// for dashbord ... //
+export const countCourse = asyncHandler(async (req, res) => {
+  try {
+    const courseCount = await Course.countDocuments();
+    res.status(200).json({ TotalCourse: courseCount });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: "Error fetching Course                                count",
+        error: error.message,
+      });
+  }
+});

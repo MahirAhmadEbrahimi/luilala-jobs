@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 
 import {
   createCourse,
@@ -18,39 +18,41 @@ import {
   getAllStudents,
   getCourseStats,
   getAllLessons,
-} from '../controllers/courseController.js';
+  countCourse,
+} from "../controllers/courseController.js";
 
-import { authenticate, authorizeAdmin } from '../middlewares/authMiddleware.js';
+import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
 const router = express.Router();
+router.get("/countCoures", countCourse);
 // Enroll a student in a course
-router.post('/enroll', enrollStudentInCourse);
+router.post("/enroll", enrollStudentInCourse);
 
 // Add a lesson to a course
-router.post('/add-lesson', addLessonToCourse);
+router.post("/add-lesson", addLessonToCourse);
 
 // Get general stats: total students and total lessons across all courses
-router.get('/student', getAllStudents);
-router.get('/lessons', getAllLessons);
+router.get("/student", getAllStudents);
+router.get("/lessons", getAllLessons);
 
 // Get stats for a specific course
-router.get('/:courseId/stats', getCourseStats);
+router.get("/:courseId/stats", getCourseStats);
 
-router.get('/searchCourse', searchCoursByName);
-router.get('/search-cours', searchCourses1);
+router.get("/searchCourse", searchCoursByName);
+router.get("/search-cours", searchCourses1);
 
-router.get('/categories', courseCategories);
-router.get('/types', coursesTypes);
-router.get('/duration', coursesDurations);
-router.get('/categories/name', courseCategoriesNames);
+router.get("/categories", courseCategories);
+router.get("/types", coursesTypes);
+router.get("/duration", coursesDurations);
+router.get("/categories/name", courseCategoriesNames);
 
-router.get('/count', getCountOfAllCourses);
+router.get("/count", getCountOfAllCourses);
 router
-  .route('/')
+  .route("/")
   .get(getAllCourses)
   .post(authenticate, authorizeAdmin, createCourse);
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(authenticate, getCourseByID)
   .patch(authenticate, authorizeAdmin, updateCourseByID)
   .delete(authenticate, authorizeAdmin, deleteCourseByID);

@@ -1,29 +1,28 @@
-
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function Searchbar() {
   const [showMoreOptions, setShowMoreOptions] = useState(false);
-  const [keyword, setKeyword] = useState('');
-  const [location, setLocation] = useState('');
-  const [minSalary, setMinSalary] = useState('');
-  const [maxSalary, setMaxSalary] = useState('');
-  const [jobType, setJobType] = useState('');
-  const [salaryType, setSalaryType] = useState('');
-  const [industry, setIndustry] = useState('');
-  const [postedDays, setPostedDays] = useState('');
+  const [keyword, setKeyword] = useState("");
+  const [location, setLocation] = useState("");
+  const [minSalary, setMinSalary] = useState("");
+  const [maxSalary, setMaxSalary] = useState("");
+  const [jobType, setJobType] = useState("");
+  const [salaryType, setSalaryType] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [postedDays, setPostedDays] = useState("");
   const [industryTypes, setIndustryTypes] = useState([]); // State to hold fetched industry types
 
   const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch industry types from the backend
-    fetch('http://127.0.0.1:3000/api/v1/employer/industries')  // Adjust the endpoint based on your backend route
+    fetch("http://127.0.0.1:3000/api/v1/employer/industries") // Adjust the endpoint based on your backend route
       .then((response) => response.json())
       .then((data) => {
-        setIndustryTypes(data);  // Store the fetched industry types in state
+        setIndustryTypes(data); // Store the fetched industry types in state
       })
-      .catch((error) => console.error('Error fetching industry types:', error));
+      .catch((error) => console.error("Error fetching industry types:", error));
   }, []);
 
   const toggleMoreOptions = () => {
@@ -105,7 +104,7 @@ function Searchbar() {
               <option value="annual">Annual</option>
             </select>
           </div>
-          
+
           {showMoreOptions && (
             <div className="flex flex-wrap gap-4 mt-4">
               <select
@@ -145,12 +144,14 @@ function Searchbar() {
               className="bg-[#194162] text-white px-4 py-2 rounded-full hover:bg-[#20517b] transition-colors duration-300"
               onClick={toggleMoreOptions}
             >
-              {showMoreOptions ? 'Less Options' : 'More Options'}
+              {showMoreOptions ? "Less Options" : "More Options"}
             </button>
             <button
               className="bg-[#194162] text-white px-4 py-2 rounded-full hover:bg-[#20517b] transition-colors duration-300"
               onClick={handleSearch}
-            > Search
+            >
+              {" "}
+              Search
             </button>
           </div>
         </div>

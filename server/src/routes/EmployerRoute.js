@@ -20,12 +20,13 @@ import {
   searchAgencies,
   getAllJobsBycName,
   getAllJobsByAgencyType,
+  countEmployers,
 } from "../controllers/EmployerController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
 const router = Router();
-
+router.route("/countemployer").get(countEmployers);
 router.route("/register").post(createEmployer);
 router.route("/login").post(loginEmployer);
 router.route("/logout").post(logoutCurrentEmployer);

@@ -1,60 +1,60 @@
-import mongoose from 'mongoose';
-import Employer from '../models/EmployersModel.js';
+import mongoose from "mongoose";
+import Employer from "../models/EmployersModel.js";
 
 const JobSchema = mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'Job title is required'],
+      required: [true, "Job title is required"],
     },
     keyword: {
       type: String,
-      required: [true, 'Job keyword is required'],
+      required: [true, "Job keyword is required"],
     },
     country: {
       type: String,
-      required: [true, 'Please provide country'],
+      required: [true, "Please provide country"],
     },
     city: {
       type: String,
-      required: [true, 'Please provide city'],
+      required: [true, "Please provide city"],
     },
     minSalary: {
       type: Number,
-      required: [true, 'Please provide minimum salary'],
+      required: [true, "Please provide minimum salary"],
     },
     maxSalary: {
       type: Number,
-      required: [true, 'Please provide maximum salary'],
+      required: [true, "Please provide maximum salary"],
     },
     jobType: {
       type: String,
-      enum: ['full-time', 'part-time', 'remote', 'internship'],
-      default: 'full-time',
+      enum: ["full-time", "part-time", "remote", "internship"],
+      default: "full-time",
     },
     salaryType: {
       type: String,
-      enum: ['hourly', 'daily', 'monthly'],
+      enum: ["hourly", "daily", "monthly"],
       // default: "monthly",
       required: true,
     },
     salarySign: {
       type: String,
-      enum: ['$', '£', '€', '¥'],
+      enum: ["$", "£", "€", "¥"],
       required: true,
     },
     location: {
       type: String,
-      required: [true, 'Please provide location'],
+      required: [true, "Please provide location"],
     },
     empId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Employer',
+      ref: "Employer",
       required: true,
     },
     description: {
       type: String,
-      required: [true, 'Please add your job description'],
+      required: [true, "Please add your job description"],
     },
     active: {
       type: Boolean,
@@ -70,14 +70,14 @@ const JobSchema = mongoose.Schema(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
-JobSchema.virtual('employer', {
-  ref: 'Employer',
-  localField: 'empId',
-  foreignField: '_id',
+JobSchema.virtual("employer", {
+  ref: "Employer",
+  localField: "empId",
+  foreignField: "_id",
   justOne: true,
 });
 
-const Job = mongoose.model('Job', JobSchema);
+const Job = mongoose.model("Job", JobSchema);
 export default Job;
 // Define a schema for image metadata
 //Virtual populate

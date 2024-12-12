@@ -454,3 +454,16 @@ export const getAllJobsByAgencyType = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+//  for dashbord //
+
+export const countEmployers = asyncHandler(async (req, res) => {
+  try {
+    const employerCount = await Employer.countDocuments();
+    res.status(200).json({ TotalEmployee: employerCount });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching employer count", error: error.message });
+  }
+});

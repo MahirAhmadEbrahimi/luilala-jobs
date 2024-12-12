@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
 
 import {
@@ -17,23 +17,26 @@ import {
   applyJob,
   addFavoriteJob,
   getFavoriteJobs,
-} from '../controllers/userController.js';
+  countUsers,
+} from "../controllers/userController.js";
 
-import { authenticate, authorizeAdmin } from '../middlewares/authMiddleware.js';
+import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
-router.route('/').get(authenticate, authorizeAdmin, getAllUsers);
-router.route('/register').post(createUser);
-router.route('/auth').post(loginUser);
-router.route('/logout').post(logoutCurrentUser);
+router.route("/countUsers").get(countUsers);
+
+router.route("/").get(authenticate, authorizeAdmin, getAllUsers);
+router.route("/register").post(createUser);
+router.route("/auth").post(loginUser);
+router.route("/logout").post(logoutCurrentUser);
 
 // Get all favorite jobs
-router.route('/getFavorites').get(authenticate, getFavoriteJobs);
+router.route("/getFavorites").get(authenticate, getFavoriteJobs);
 
 // Add job to favorites
-router.route('/addFavorites').post(authenticate, addFavoriteJob);
+router.route("/addFavorites").post(authenticate, addFavoriteJob);
 
 router.patch(
-  '/updateMe',
+  "/updateMe",
   authenticate,
   uploadUserPhoto,
   resizeUserPhoto,
@@ -41,12 +44,12 @@ router.patch(
 );
 
 router
-  .route('/profile')
+  .route("/profile")
   .get(authenticate, getCurrentUserProfile)
   .patch(authenticate, updateCurrentUserProfile);
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(authenticate, authorizeAdmin, findUserByID)
   .patch(authenticate, authorizeAdmin, updateUserById)
   .delete(authenticate, authorizeAdmin, deleteUserByID);

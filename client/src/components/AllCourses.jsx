@@ -10,8 +10,7 @@
 // };
 
 // const AllCourses = () => {
-  
-  
+
 //   const [searchQuery, setSearchQuery] = useState('');
 //   const [selectedCategory, setSelectedCategory] = useState('');
 
@@ -133,37 +132,24 @@
 
 // export default AllCourses;
 
-
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState } from 'react'; 
-import ContentContainer from './ContentContainer';
-import CoursesSection from './CoursesSection';
-import '../styles/global.css';
+import React, { useState } from "react";
+import ContentContainer from "./ContentContainer";
+import CoursesSection from "./CoursesSection";
+import "../styles/global.css";
 
 const AllCourses = () => {
-
-
   return (
     <div>
       <div className="bg-white shadow-lg rounded-lg p-6 z-10 lg:p-8">
         <div className="flex flex-col lg:flex-row items-center justify-between w-full">
-          <h1 className="text-4xl font-bold text-gray-800 mb-6 lg:mb-0">Courses</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6 lg:mb-0">
+            Courses
+          </h1>
           <div className="relative flex items-center w-full max-w-xl">
             <input
               type="search"
               className="bg-gray-100 border-gray-300 px-12 pr-12 rounded-full py-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
               placeholder="Search courses..."
-            
             />
             <span className="absolute right-4 text-gray-500">
               <svg
@@ -182,10 +168,7 @@ const AllCourses = () => {
               </svg>
             </span>
           </div>
-          <select
-            className="bg-gray-100 rounded-full border-gray-300 px-8 py-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mt-4 lg:mt-0 lg:ml-4"
-           
-          >
+          <select className="bg-gray-100 rounded-full border-gray-300 px-8 py-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mt-4 lg:mt-0 lg:ml-4">
             <option value="">Sort by</option>
             <option value="popular">Popular course</option>
             <option value="release_date">Release Date</option>
@@ -193,43 +176,16 @@ const AllCourses = () => {
             <option value="price_high_low">Price (high to low)</option>
             <option value="price_low_high">Price (low to high)</option>
             <option value="rating_high_low">Rating (high to low)</option>
-            <option value="duration_short_long">Duration (short to long)</option>
+            <option value="duration_short_long">
+              Duration (short to long)
+            </option>
             <option value="rating_low_high">Rating (low to high)</option>
           </select>
         </div>
       </div>
-      <ContentContainer>
-      
-      </ContentContainer>
+      <ContentContainer></ContentContainer>
     </div>
   );
 };
 
 export default AllCourses;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

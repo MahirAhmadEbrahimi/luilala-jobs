@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import {
   createJobAlert,
   deleteJobAlert,
@@ -6,22 +6,22 @@ import {
   getAllJobAlertsForUser,
   getJobAlert,
   updateJobAlert,
-} from '../controllers/JobAlertController.js';
-import { authenticate } from '../middlewares/authMiddleware.js';
+} from "../controllers/JobAlertController.js";
+import { authenticate } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   .get(authenticate, getAllJobAlerts)
   .post(authenticate, createJobAlert);
 
 router
-  .route('/jobAlertsLengthForCurrentUser')
+  .route("/jobAlertsLengthForCurrentUser")
   .get(authenticate, getAllJobAlertsForUser);
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(authenticate, getJobAlert)
   .patch(authenticate, updateJobAlert)
   .delete(authenticate, deleteJobAlert);

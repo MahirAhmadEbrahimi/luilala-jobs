@@ -1,25 +1,25 @@
-import multer from 'multer';
-import sharp from 'sharp';
-import path from 'path';
-import fs from 'fs';
-import User from '../models/userModel.js';
+import multer from "multer";
+import sharp from "sharp";
+import path from "path";
+import fs from "fs";
+import User from "../models/userModel.js";
 
-import asyncHandler from '../middlewares/asyncHandler.js';
-import generateToken from '../utils/create-token.js';
+import asyncHandler from "../middlewares/asyncHandler.js";
+import generateToken from "../utils/create-token.js";
 
 // Multer setup
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
+  if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
-    cb(new AppError('Not an image! Please upload only images.', 400), false);
+    cb(new AppError("Not an image! Please upload only images.", 400), false);
   }
 };
 
 const __dirname = path.resolve();
-const dir = path.join(__dirname, 'public/img/users');
+const dir = path.join(__dirname, "public/img/users");
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir, { recursive: true });
 }
@@ -28,7 +28,7 @@ const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
 });
-const uploadUserPhoto = upload.single('photo');
+const uploadUserPhoto = upload.single("photo");
 
 const resizeUserPhoto = asyncHandler(async (req, res, next) => {
   if (!req.file) return next();
@@ -37,7 +37,7 @@ const resizeUserPhoto = asyncHandler(async (req, res, next) => {
   try {
     await sharp(req.file.buffer)
       .resize(500, 500)
-      .toFormat('jpeg')
+      .toFormat("jpeg")
       .jpeg({ quality: 90 })
       .toFile(`public/img/users/${req.file.filename}`);
   } catch (error) {
@@ -59,7 +59,7 @@ const updateUserPhoto = asyncHandler(async (req, res) => {
   );
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: {
       user,
     },
@@ -70,11 +70,11 @@ const createUser = asyncHandler(async (req, res) => {
   const { fullName, email, password, isAdmin, image } = req.body;
 
   if ((!fullName || !email, !password)) {
-    throw new Error('Please fill all the fields');
+    throw new Error("Please fill all the fields");
   }
 
   const userExist = await User.findOne({ email });
-  if (userExist) throw new Error('User already exist');
+  if (userExist) throw new Error("User already exist");
 
   const currentUser = new User({ fullName, email, password, image });
   try {
@@ -90,7 +90,7 @@ const createUser = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     res.status(400);
-    throw new Error('Invalid user data');
+    throw new Error("Invalid user data");
   }
 });
 
@@ -98,7 +98,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   console.log(email, password);
   if ((!email, !password)) {
-    throw new Error('Please fill all the fields');
+    throw new Error("Please fill all the fields");
   }
 
   const currentUser = await User.findOne({ email });
@@ -114,17 +114,17 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(401);
-    throw new Error('You are not logged in pleas log in!');
+    throw new Error("You are not logged in pleas log in!");
   }
 });
 
 const logoutCurrentUser = (req, res) => {
-  res.cookie('jwt', ' ', {
+  res.cookie("jwt", " ", {
     httpOnly: true,
     expires: new Date(0),
   });
 
-  res.status(200).json({ message: 'Logout successfully' });
+  res.status(200).json({ message: "Logout successfully" });
 };
 
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -147,7 +147,7 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error('User not found!');
+    throw new Error("User not found!");
   }
 });
 
@@ -172,13 +172,13 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
 });
 
 const findUserByID = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).populate('jobAlerts');
+  const user = await User.findById(req.params.id).populate("jobAlerts");
 
   if (user) {
     res.status(200).json(user);
   } else {
     res.status(404);
-    throw new Error('USer not found!');
+    throw new Error("USer not found!");
   }
 });
 
@@ -200,7 +200,7 @@ const updateUserById = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error('User not found!');
+    throw new Error("User not found!");
   }
 });
 
@@ -209,13 +209,13 @@ const deleteUserByID = asyncHandler(async (req, res) => {
   if (user) {
     if (user.isAdmin) {
       res.status(400);
-      throw new Error('Can not delete user as admin!');
+      throw new Error("Can not delete user as admin!");
     }
 
     await User.deleteOne({ _id: user._id });
-    res.status(204).json({ message: 'User removed successfully' });
+    res.status(204).json({ message: "User removed successfully" });
   } else {
-    res.status(404).json({ message: 'User not found!' });
+    res.status(404).json({ message: "User not found!" });
   }
 });
 
@@ -226,14 +226,14 @@ const applyJob = asyncHandler(async (req, res) => {
   const user = await User.findById({ _id: userId });
   if (!user) {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 
   // Check if the user already has a CV
   if (!user.cv && !req.file) {
     res.status(400);
     throw new Error(
-      'No CV uploaded. Please upload your CV to apply for the job.'
+      "No CV uploaded. Please upload your CV to apply for the job."
     );
   }
 
@@ -247,12 +247,12 @@ const applyJob = asyncHandler(async (req, res) => {
   const job = await Job.findById(jobId);
   if (!job) {
     return res.status(404);
-    throw new Error('Job not found');
+    throw new Error("Job not found");
   }
 
   if (user.appliedJobs.includes(jobId)) {
     res.status(400);
-    throw new Error('You have already applied for this job.');
+    throw new Error("You have already applied for this job.");
   }
 
   // Add job ID to user's applied jobs list
@@ -260,7 +260,7 @@ const applyJob = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  res.status(200).json({ message: 'Job application successful' });
+  res.status(200).json({ message: "Job application successful" });
 });
 
 // Add job to favorites
@@ -271,14 +271,14 @@ const addFavoriteJob = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     if (!user.favoriteJobs.includes(jobId)) {
       user.favoriteJobs.push(jobId);
       await user.save();
       return res.status(200).json({
-        message: 'Job added to favorites',
+        message: "Job added to favorites",
         user,
       });
     } else {
@@ -287,12 +287,12 @@ const addFavoriteJob = async (req, res) => {
       );
       await user.save();
       return res.status(200).json({
-        message: 'Job removed from favorites',
+        message: "Job removed from favorites",
         user,
       });
     }
   } catch (error) {
-    return res.status(500).json({ error: 'Failed to add job to favorites' });
+    return res.status(500).json({ error: "Failed to add job to favorites" });
   }
 };
 
@@ -305,10 +305,10 @@ const getFavoriteJobs = async (req, res) => {
     const userId = req.user._id;
 
     // Find the user and populate the favoriteJobs field
-    const user = await User.findById(userId).populate('favoriteJobs');
+    const user = await User.findById(userId).populate("favoriteJobs");
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Return the favorite jobs populated from the Job model
@@ -316,9 +316,21 @@ const getFavoriteJobs = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: 'Failed to fetch favorite jobs', message: error.message });
+      .json({ error: "Failed to fetch favorite jobs", message: error.message });
   }
 };
+
+// for dashbord ... //
+const countUsers = asyncHandler(async (req, res) => {
+  try {
+    const countuser = await User.countDocuments();
+    res.status(200).json({ TotalUsers: countuser });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching User count", error: error.message });
+  }
+});
 
 export {
   createUser,
@@ -336,4 +348,5 @@ export {
   applyJob,
   addFavoriteJob,
   getFavoriteJobs,
+  countUsers,
 };

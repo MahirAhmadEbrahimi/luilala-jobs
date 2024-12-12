@@ -1,7 +1,36 @@
 import { Link } from "react-router-dom";
-import CareerAdviceLinks from "../CarrerAdvice/CareerAdviceLinks";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import CareerAdviceLinks from "../CarrerAdvice/CareerAdviceLinks"; // Ensure correct path
 
-export default function CareerAdvice({ title = 'Career Advice', description = 'Our advice centre contains articles with helpful tips, how-to guides and CV templates. Written by career experts, were committed to helping your job search and ensuring you get the most from your career.' }) {
+export default function CareerAdvice({
+  title = "Career Advice",
+  description = "Our advice centre contains articles with helpful tips, how-to guides and CV templates. Written by career experts, we're committed to helping your job search and ensuring you get the most from your career.",
+}) {
+  const [keyword, setKeyword] = useState(""); // State for job title or keyword
+  const [location, setLocation] = useState(""); // State for location
+  const navigate = useNavigate(); // Hook for navigation
+
+  // Fetch industry types from the backend
+  useEffect(() => {
+    fetch("http://127.0.0.1:3000/api/v1/employer/industries") // Adjust the endpoint based on your backend route
+      .then((response) => response.json())
+      .then((data) => {
+        // Store the fetched industry types in state if needed
+        // setIndustryTypes(data); // Uncomment if using industry types
+      })
+      .catch((error) => console.error("Error fetching industry types:", error));
+  }, []);
+
+  // Handler for the search button click
+  const handleSearch = () => {
+    const queryParams = new URLSearchParams({
+      keyword,
+      location,
+    }).toString();
+
+    navigate(`/secondSearch-Result?${queryParams}`);
+  };
 
   return (
     <div className="bg-gray-50 py-2">
@@ -27,6 +56,8 @@ export default function CareerAdvice({ title = 'Career Advice', description = 'O
             type="text"
             className="ml-3 w-full py-3 px-3 border border-gray-300 focus:border-[#002244] focus:ring-[#002244] focus:ring-1 focus:outline-none rounded-md"
             placeholder="Job title or keyword"
+            value={keyword} // Bind keyword state
+            onChange={(e) => setKeyword(e.target.value)} // Update keyword state
           />
         </div>
         <div className="flex items-center justify-center border-r border-gray-300 pr-4 mr-4 w-full md:w-[30vw] mb-4 md:mb-0">
@@ -56,17 +87,24 @@ export default function CareerAdvice({ title = 'Career Advice', description = 'O
             type="text"
             className="ml-3 px-3 w-full py-3 border border-gray-300 focus:border-[#002244] focus:ring-[#002244] focus:ring-1 focus:outline-none rounded-md"
             placeholder="Add Country or City"
+            value={location} // Bind location state
+            onChange={(e) => setLocation(e.target.value)} // Update location state
           />
         </div>
-        <button className="bg-[#002244] hover:bg-[#1a3857] mx-auto md:mx-2 text-white px-8 py-3 rounded-full transition-colors duration-300 flex-shrink-0">
+        <button
+          className="bg-[#002244] hover:bg-[#1a3857] mx-auto md:mx-2 text-white px-8 py-3 rounded-full transition-colors duration-300 flex-shrink-0"
+          onClick={handleSearch} // Trigger search on click
+        >
           Search
         </button>
       </div>
 
-      {/* code of after search */}
+      {/* Code after search */}
       <div className="bg-white py-8 text-center border-y-2 border-gray-200 px-6 md:px-12">
         <h2 className="text-2xl font-bold mb-4">{title}</h2>
-        <p className="text-gray-700 mx-auto md:w-[60vw] leading-relaxed">{description}</p>
+        <p className="text-gray-700 mx-auto md:w-[60vw] leading-relaxed">
+          {description}
+        </p>
       </div>
 
       <div className="links">

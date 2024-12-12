@@ -1,11 +1,10 @@
-import Job from '../models/jobsModel.js';
-import Employer from '../models/EmployersModel.js';
-import CV from '../models/CV_Model.js';
-import asyncHandler from '../middlewares/asyncHandler.js';
+import Job from "../models/jobsModel.js";
+import Employer from "../models/EmployersModel.js";
+import CV from "../models/CV_Model.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 
-import JobAlert from '../models/jobAlertModel.js';
-import sendEmailWithMatchingJobs from '../utils/sendEmail.js';
-
+import JobAlert from "../models/jobAlertModel.js";
+import sendEmailWithMatchingJobs from "../utils/sendEmail.js";
 
 export const checkIfJobMatchesAlert = (job, alert) => {
   return (
@@ -15,9 +14,9 @@ export const checkIfJobMatchesAlert = (job, alert) => {
   );
 };
 
-import path from 'path';
-import { count } from 'console';
-import User from '../models/userModel.js';
+import path from "path";
+import { count } from "console";
+import User from "../models/userModel.js";
 
 export const findJobs = async (req, res) => {
   try {
@@ -41,19 +40,19 @@ export const findJobs = async (req, res) => {
 
     // Add filters dynamically based on the request query
     if (title) {
-      queryObject.title = { $regex: title, $options: 'i' };
+      queryObject.title = { $regex: title, $options: "i" };
     }
 
     if (keyword) {
-      queryObject.keyword = { $regex: keyword, $options: 'i' };
+      queryObject.keyword = { $regex: keyword, $options: "i" };
     }
 
     if (country) {
-      queryObject.country = { $regex: country, $options: 'i' };
+      queryObject.country = { $regex: country, $options: "i" };
     }
 
     if (city) {
-      queryObject.city = { $regex: city, $options: 'i' };
+      queryObject.city = { $regex: city, $options: "i" };
     }
 
     if (minSalary) {
@@ -65,19 +64,19 @@ export const findJobs = async (req, res) => {
     }
 
     if (jobType) {
-      queryObject.jobType = { $regex: jobType, $options: 'i' };
+      queryObject.jobType = { $regex: jobType, $options: "i" };
     }
 
     if (salaryType) {
-      queryObject.salaryType = { $regex: salaryType, $options: 'i' };
+      queryObject.salaryType = { $regex: salaryType, $options: "i" };
     }
 
     if (location) {
-      queryObject.location = { $regex: location, $options: 'i' };
+      queryObject.location = { $regex: location, $options: "i" };
     }
 
     if (company) {
-      queryObject.company = { $regex: company, $options: 'i' };
+      queryObject.company = { $regex: company, $options: "i" };
     }
 
     // Posted In: Filter by liveTime (posted within the last X days)
@@ -94,16 +93,16 @@ export const findJobs = async (req, res) => {
     // Sorting options
     if (sortBy) {
       switch (sortBy) {
-        case 'Date Posted':
+        case "Date Posted":
           sortObject = { liveTime: -1 }; // Most recent jobs first
           break;
-        case 'Salary':
+        case "Salary":
           sortObject = { maxSalary: -1 }; // Highest salary first
           break;
-        case 'Company Name':
-          sortObject = { 'empId.employerName': 1 }; // Sort alphabetically by company name
+        case "Company Name":
+          sortObject = { "empId.employerName": 1 }; // Sort alphabetically by company name
           break;
-        case 'Relevance':
+        case "Relevance":
         default:
           sortObject = { createdAt: -1 }; // Default to relevance or newest jobs first
           break;
@@ -113,10 +112,10 @@ export const findJobs = async (req, res) => {
     // Fetch jobs and filter by industry from the employer model
     const jobs = await Job.find(queryObject)
       .populate({
-        path: 'empId',
-        select: 'employerName logo industry',
+        path: "empId",
+        select: "employerName logo industry",
         match: industry
-          ? { industry: { $regex: industry, $options: 'i' } }
+          ? { industry: { $regex: industry, $options: "i" } }
           : {}, // Filter jobs by employer's industry
       })
       .sort(sortObject) // Apply sorting logic
@@ -139,7 +138,7 @@ export const findJobs = async (req, res) => {
       ...job._doc,
       postedTime: job.liveTime
         ? `Last ${getDaysAgo(job.liveTime)} days`
-        : 'No live time', // Format liveTime
+        : "No live time", // Format liveTime
     }));
 
     res.status(200).json({
@@ -174,10 +173,10 @@ export const createJob = asyncHandler(async (req, res) => {
     const { title, keyword, location } = newJob;
 
     const jobAlerts = await JobAlert.find({
-      location: { $regex: location, $options: 'i' },
+      location: { $regex: location, $options: "i" },
       $or: [
-        { titleOrKeyword: { $regex: title, $options: 'i' } },
-        { titleOrKeyword: { $regex: keyword, $options: 'i' } },
+        { titleOrKeyword: { $regex: title, $options: "i" } },
+        { titleOrKeyword: { $regex: keyword, $options: "i" } },
       ],
     });
 
@@ -198,18 +197,18 @@ export const createJob = asyncHandler(async (req, res) => {
 export const getEmployerByJobId = asyncHandler(async (req, res) => {
   const { jobId } = req.params;
   if (!jobId) {
-    return res.status(400).json({ error: 'JobId is required' });
+    return res.status(400).json({ error: "JobId is required" });
   }
   const job = await Job.findOne({ _id: jobId });
 
   const jobs = await Employer.findOne({ _id: job.empId });
 
   if (!jobs) {
-    return res.status(404).json({ error: 'Employer not found' });
+    return res.status(404).json({ error: "Employer not found" });
   }
 
   if (!job) {
-    return res.status(404).json({ error: 'Job not found' });
+    return res.status(404).json({ error: "Job not found" });
   }
 
   res.status(200).json({
@@ -239,7 +238,7 @@ export const getAllLiveJobsLength = asyncHandler(async (req, res) => {
 export const getJobByid = asyncHandler(async (req, res) => {
   const job = await Job.findById(req.params.id);
   if (!job) {
-    return res.status(404).json({ message: 'Job not found' });
+    return res.status(404).json({ message: "Job not found" });
   }
   res.status(200).json({
     success: true,
@@ -250,7 +249,7 @@ export const getJobByid = asyncHandler(async (req, res) => {
 export const getLocations = async (req, res) => {
   try {
     // Find the distinct locations for all jobs with a live time
-    const locations = await Job.distinct('location', {
+    const locations = await Job.distinct("location", {
       liveTime: { $gte: new Date() },
     });
 
@@ -267,7 +266,7 @@ export const getIndustries = async (req, res) => {
     // Find all the live jobs and populate the employer field
     const liveJobs = await Job.find({
       liveTime: { $gte: new Date() },
-    }).populate('employer');
+    }).populate("employer");
 
     // Create a set to store unique industries
     const industries = new Set();
@@ -283,7 +282,7 @@ export const getIndustries = async (req, res) => {
     if (industries.size === 0) {
       res.status(200).json({
         message:
-          'No live job postings found with associated employer industries.',
+          "No live job postings found with associated employer industries.",
       });
     } else {
       res.status(200).json(Array.from(industries));
@@ -299,7 +298,7 @@ export const getIndustriess = async (req, res) => {
     // Find all the live jobs and populate the employer field
     const liveJobs = await Job.find({
       liveTime: { $gte: new Date() },
-    }).populate('employer');
+    }).populate("employer");
 
     // Create a set to store unique industries
     const industries = new Set();
@@ -315,7 +314,7 @@ export const getIndustriess = async (req, res) => {
     if (industries.size === 0) {
       res.status(200).json({
         message:
-          'No live job postings found with associated employer industries.',
+          "No live job postings found with associated employer industries.",
       });
     } else {
       res.status(200).json({
@@ -342,30 +341,30 @@ export const getCompanys = async (req, res) => {
       },
       {
         $group: {
-          _id: '$empId',
-          employerName: { $first: '$employer.employerName' },
+          _id: "$empId",
+          employerName: { $first: "$employer.employerName" },
           activeJobs: { $sum: 1 },
         },
       },
       {
         $lookup: {
-          from: 'employers',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'employer',
+          from: "employers",
+          localField: "_id",
+          foreignField: "_id",
+          as: "employer",
         },
       },
       {
-        $unwind: '$employer',
+        $unwind: "$employer",
       },
       {
         $project: {
           _id: 0,
           employerName: {
             $cond: {
-              if: { $eq: ['$employer.employerName', null] },
-              then: 'Unknown',
-              else: '$employer.employerName',
+              if: { $eq: ["$employer.employerName", null] },
+              then: "Unknown",
+              else: "$employer.employerName",
             },
           },
           activeJobs: 1,
@@ -379,7 +378,7 @@ export const getCompanys = async (req, res) => {
     );
 
     const companies = companiesWithActiveJobs.map(
-      ({ employerName }) => employerName.trim() || 'Unknown'
+      ({ employerName }) => employerName.trim() || "Unknown"
     );
 
     res.status(200).json({
@@ -405,30 +404,30 @@ export const getCompanysLength = async (req, res) => {
       },
       {
         $group: {
-          _id: '$empId',
-          employerName: { $first: '$employer.employerName' },
+          _id: "$empId",
+          employerName: { $first: "$employer.employerName" },
           activeJobs: { $sum: 1 },
         },
       },
       {
         $lookup: {
-          from: 'employers',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'employer',
+          from: "employers",
+          localField: "_id",
+          foreignField: "_id",
+          as: "employer",
         },
       },
       {
-        $unwind: '$employer',
+        $unwind: "$employer",
       },
       {
         $project: {
           _id: 0,
           employerName: {
             $cond: {
-              if: { $eq: ['$employer.employerName', null] },
-              then: 'Unknown',
-              else: '$employer.employerName',
+              if: { $eq: ["$employer.employerName", null] },
+              then: "Unknown",
+              else: "$employer.employerName",
             },
           },
           activeJobs: 1,
@@ -442,7 +441,7 @@ export const getCompanysLength = async (req, res) => {
     );
 
     const companies = companiesWithActiveJobs.map(
-      ({ employerName }) => employerName.trim() || 'Unknown'
+      ({ employerName }) => employerName.trim() || "Unknown"
     );
 
     res.status(200).json(companies.length);
@@ -452,16 +451,16 @@ export const getCompanysLength = async (req, res) => {
 };
 
 const trendingJobs = [
-  'Artificial Intelligence (AI) Specialist',
-  'Data Scientist',
-  'Cybersecurity Specialist',
-  'Cloud Computing Engineer',
-  'Full Stack Developer',
-  'Digital Marketing Specialist',
-  'Health Informatics Specialist',
-  'Renewable Energy Engineer',
-  'UX/UI Designer',
-  'Supply Chain Management Specialist',
+  "Artificial Intelligence (AI) Specialist",
+  "Data Scientist",
+  "Cybersecurity Specialist",
+  "Cloud Computing Engineer",
+  "Full Stack Developer",
+  "Digital Marketing Specialist",
+  "Health Informatics Specialist",
+  "Renewable Energy Engineer",
+  "UX/UI Designer",
+  "Supply Chain Management Specialist",
 ];
 
 export const getAllTrending = asyncHandler(async (req, res) => {
