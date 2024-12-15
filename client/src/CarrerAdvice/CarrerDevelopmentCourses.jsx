@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function CarrerDevelopmentCourses() {
   const [data, setData] = useState([]);
   const [dataa, setDataa] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [dataaa, setDataaaa] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +49,28 @@ export default function CarrerDevelopmentCourses() {
   }, []);
   // **********************8
 
+  useEffect(() => {
+    const fetchDataaa = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:3000/api/v1/cours/categories"
+        );
+        setDataaaa(response.data.result); // Set data from the API response
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError(error.response ? error.response.data : error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDataaa();
+  }, []);
+
+  const handleSeeAllCourses = () => {
+    navigate("/onlinecourses"); // Navigate to '/onlinecourses'
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error fetching data: {error}</div>;
   return (
@@ -82,7 +107,12 @@ export default function CarrerDevelopmentCourses() {
             <div className="flex  justify-between items-center mb-4">
               <h3 className="text-2xl font-semibold">Popular Career Advice</h3>
               <a href="#" className="text-blue-500 hover:underline">
-                All courses
+                <button
+                  className="bg-[#002244] hover:bg-[#1a3857] text-white font-bold py-4 px-8 rounded-full"
+                  onClick={handleSeeAllCourses} // Trigger navigation on click
+                >
+                  See All Courses
+                </button>
               </a>
             </div>
 
